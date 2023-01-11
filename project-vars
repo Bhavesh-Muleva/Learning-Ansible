@@ -1,5 +1,5 @@
 version: 2.0
-location: /home/bhavesh/devopsProject/mynodeapp-cicd-project
+location: /home/bhavesh/devopsProject/Learning-Ansible/mynodeapp-cicd-project
 linux_name: bhavesh
 user_home_dir: /home/{{linux_name}}
 
