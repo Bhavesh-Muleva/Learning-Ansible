@@ -35,7 +35,7 @@
     - name: Unpack the nodejs file
       ansible.builtin.unarchive:
         src: "{{location}}/nodejs-app-{{version}}.tar.gz"               # nodejs-app-{{version}}.tar.gz <- is my application tar file make sure you have your own one. 
-        dest: "{{user_home_dir}}/nodejs-app-{{version}}.tar.gz"
+        dest: "{{user_home_dir}}/"
     - name: Install dependencies
       community.general.npm:
         path: "{{user_home_dir}}/mynodeapp-cicd-project/"
