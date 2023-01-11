@@ -38,12 +38,12 @@
         dest: "{{user_home_dir}}/"
     - name: Install dependencies
       community.general.npm:
-        path: "{{user_home_dir}}/mynodeapp-cicd-project/app"
+        path: "{{user_home_dir}}/mynodeapp-cicd-project/app/"
     - name: Start the application
       ansible.builtin.command:
         chdir: "{{user_home_dir}}/mynodeapp-cicd-project/app"
         cmd: node server
-      async: 1000
+      async: 1000             #this make task asynchronous which means it will be running in backgroud and our playbook task will be continued. 
       poll: 0
     - name: Ensure app is running
       ansible.builtin.shell: ps aux | grep node
