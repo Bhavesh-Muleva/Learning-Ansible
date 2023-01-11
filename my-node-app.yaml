@@ -2,7 +2,7 @@
 - name: Create new linux user and group
   hosts: webserver
   become: yes
-  become_user: admin
+  become_user: root
   vars_files:
     - project-vars
   tasks: 
@@ -15,7 +15,7 @@
 - name: Install Node and npm
   hosts: webserver
   become: yes
-  become_user: admin
+  become_user: root
   tasks: 
     - name: update apt repo and cache
       ansible.builtin.apt: update_cache=true  force_apt_get=yes cache_valid_time=3600
@@ -28,7 +28,7 @@
 - name: Deploy nodejs app
   hosts: webserver
   become: True
-  become_user: "{{linux_name}}"
+  become_user: root
   vars_files:
     - project-vars
   tasks:
