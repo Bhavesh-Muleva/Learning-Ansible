@@ -38,7 +38,7 @@
         dest: "{{user_home_dir}}/"
     - name: Install dependencies
       community.general.npm:
-        path: "{{user_home_dir}}/mynodeapp-cicd-project/"
+        path: "{{user_home_dir}}/mynodeapp-cicd-project/app"
     - name: Start the application
       ansible.builtin.command:
         chdir: "{{user_home_dir}}/mynodeapp-cicd-project/app"
