@@ -1,0 +1,60 @@
+---
+- name: Install python3, docker, docker-compose
+  hosts: webserver
+  become: true
+  gather_facts: False
+  tasks:
+    - name: Install Python3 and Docker
+      vars:
+        ansible_python_interpreter: /usr/bin/python
+      ansible_builtin.yum:
+        name: 
+          - python3
+          - docker
+        update_cache: yes
+        state: present
+    - name: Install Docker-Compose
+      ansible.builtin.get_url: 
+      url: https://github.com/docker/compose/releases/download/1.27.4/docker-compose-Linux-{{lookup('pipe', 'uname -m')}}
+      dest: /usr/local/bin/docker-compose
+      mode: +x
+    - name: Start Docker Daemon
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+    - name: Install docker python module
+      ansible.builtin.pip:
+        name:
+         - docker
+         - docker-compose  
+
+name: Add ec2-user to docker group
+  hosts: webserver
+  become: yes
+  tasks: 
+    - name: Add ec2-user to docker group
+      ansible.builtin.user: 
+        name: ec2-user
+        groups: docker
+        append: yes
+    - name: Reconnect to server session
+      ansible.builtin.meta: reset_connection
+
+
+- name: Start Docker Containers
+  hosts: webserver
+  vars_files:
+    - project-vars
+  tasks:
+    - name: Copy docker Compose
+      ansible.builtin.copy:
+        src:  <put location of docker compose file>                #/Users/nanajanashia/Demo-projects/Bootcamp/Exercises/bootcamp-java-mysql-project/docker-compose-full.yaml
+        dest: /home/ec2-user/docker-compose.yaml
+    - name: Docker login
+      community.docker.docker_login: 
+        registry_url: https://index.docker.io/v1/
+        username: bhaveshmuleva
+        password: "{{docker_password}}"
+    - name: Start container from compose
+      community.docker.docker_compose: 
+        project_src: /home/ec2-user

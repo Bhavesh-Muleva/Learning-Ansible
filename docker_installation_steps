@@ -1,0 +1,5 @@
+1- Install python3, docker, docker-compose
+for docker-compose use below url to download
+https://github.com/docker/compose/releases/download/1.27.4/docker-compose-Linux-{{lookup('pipe', 'uname -m')}}
+2- Add ec2-user to docker group
+3- Start Docker Containers
