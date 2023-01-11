@@ -1,5 +1,5 @@
 [webserver]
-65.2.127.100
+3.110.223.172
 
 [webserver:vars]
 ansible_ssh_private_key_file=/d/college project/DevOps Project/Ansible/linux-machine.pem 

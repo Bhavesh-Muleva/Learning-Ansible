@@ -1,0 +1,46 @@
+---
+- name: Install Node and npm
+  hosts: webserver
+  tasks: 
+    - name: update apt repo and cache
+      ansible.builtin.apt: update_cache=true  force_apt_get=yes cache_valid_time=3600
+    - name: Install nodejs and npm
+      ansible.builtin.apt: 
+        pkg:
+          - nodejs
+          - npm
+
+- name: Create new linux user and group
+  hosts: webserver
+  vars_files:
+    - project-vars
+  - tasks: 
+    - name: creating linux user
+      ansible.builtin.user: 
+        name: "{{linux_name}}"
+        comment: Node User
+        group: admin
+
+- name: Deploy nodejs app
+  hosts: webserver
+  become: true
+  become_user: "{{linux_name}}"
+  var_files:
+    - project-vars
+  tasks:
+    - name: Unpack the nodejs file
+      ansible.builtin.unarchive:
+        src: "{{location}}/nodejs-app-{{version}}.tar.gz"               # nodejs-app-{{version}}.tar.gz <- is my application tar file make sure you have your own one. 
+        dest: "/{{user_home_dir}}/nodejs-app-{{version}}.tar.gz"
+    - name: Install dependencies
+      community.general.npm:
+        path: "{{user_home_dir}}/mynodeapp-cicd-project/"
+    - name: Start the application
+        chdir: "{{user_home_dir}}/mynodeapp-cicd-project/app"
+        cmd: node server &
+      async: 1000
+      poll: 0
+    - name: Ensure app is running
+      ansible.builtin.shell: ps aux | grep node
+      register: app_status
+    - ansible.builtin.debug: msg{{app_status.stdout_lines}}
