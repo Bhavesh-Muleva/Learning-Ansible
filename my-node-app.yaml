@@ -14,7 +14,7 @@
   hosts: webserver
   vars_files:
     - project-vars
-  - tasks: 
+  tasks: 
     - name: creating linux user
       ansible.builtin.user: 
         name: "{{linux_name}}"
