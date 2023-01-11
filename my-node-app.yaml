@@ -25,7 +25,7 @@
   hosts: webserver
   become: true
   become_user: "{{linux_name}}"
-  var_files:
+  vars_files:
     - project-vars
   tasks:
     - name: Unpack the nodejs file
